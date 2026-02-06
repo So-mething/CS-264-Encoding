@@ -1,4 +1,12 @@
-MorseCodeDictionary = {'A': '.-','B': '-...','C': '-.-.','D': '-..','E': '.','F': '..-.','G': '--.','H': '....','I': '..','J': '.---','K': '-.--','L': '.-..','M': '--','N': '-.','O': '---','P': '.--.','Q': '--.-','R': '.-.-','S': '...','T': '-','U': '..-','V':'...-','W': '.--','X': '-..-','Y': '-.--','Z': '--..'} 
+Morse_Code_Dictionary = {'a': '.-','b': '-...','c': '-.-.','d': '-..','e': '.','f': '..-.','g': '--.','h': '....','i': '..','j': '.---','k': '-.--','l': '.-..','m': '--','n': '-.','o': '---','p': '.--.','q': '--.-','r': '.-.-','s': '...','t': '-','u': '..-','v':'...-','w': '.--','x': '-..-','y': '-.--','z': '--..', ' ': '/'} 
 
-def morsecode(original_text, change_text, encode_or_decode)  
-    output_text = " " 
+def words_to_morse(message): 
+    morse = [] 
+
+for char in message.lower(): 
+    if char in Morse_Code_Dictionary: 
+        morse_message.append(Morse_Code_Dictionary[char]) 
+    else:
+        pass 
+        
+return " ". join(morse_message)
