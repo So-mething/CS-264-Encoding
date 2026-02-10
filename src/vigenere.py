@@ -1,0 +1,44 @@
+alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+def vigenere(original_text, key_word, encode_or_decode): # I need to get better at using functions
+    output_text = "" # This is to just put whatever the encryption is gonna put out.
+    key_length = len(key_word) # Gets and assigns the length of the key so we can loop through the key word if it's smaller than the plaintext
+    
+    for i in range(len(original_text)): # The loop that iterates i through a range of 0 to X, with X being the actual length of the plaintext
+        char = original_text[i] # Checks the character at each position in the original text, since strings are basically lists themselves.
+        
+        if char not in alphabet: # If it's not in the alphabet, we just put it in anyways. Pretty sure that's how whitespace is also transferred but wtv idrk
+            output_text += char
+
+        else:
+            key_char = key_word[i % key_length] # Assigns a character from the actual key to the variable "key_char". The index is basically "i modulo length of the key" so we can cycle through them later
+            shift_amount = alphabet.index(key_char) + 1 
+
+            # The shift amount is determined by the index of the character found from key_char. It takes the character and looks at where it is in the alphabet.
+            # The "+1" is there because the index would otherwise go 0-25, meaning if you had a key letter of "A" it just wouldn't move. This is not how the cipher works, so this way you still move
+            # EX: Ptext = A; Key = A; Encryption = B (A itself is the first letter, so you move it by 1)
+
+            if encode_or_decode == "decode": # This is to move backwards when decoding.
+                shift_amount *= -1
+                
+            shifted_position = alphabet.index(char) + shift_amount # Yeah you can probably tell what this does
+            shifted_position %= len(alphabet) # This is so we don't go out of bounds with the actual list and go to like idk an index of 42 or smth
+            output_text += alphabet[shifted_position] # Adds whatever letter in the alphabet is in the position of the "shifted_position" value to the actual output
+            
+    print(f"Here is the {encode_or_decode}d result: {output_text}") # Self explanatory
+
+should_continue = True # This is set to true so that if you go through the process and then want to stop, you can then stop. Will likely get removed when implemented into the JS
+
+while should_continue:
+    # These three variables below are what goes into the function
+
+    direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n").lower()
+    text = input("Type your message:\n").lower()
+    key = input("Type the keyword (letters only):\n").lower()
+
+    vigenere(original_text=text, key_word=key, encode_or_decode=direction)
+
+    restart = input("Type 'yes' if you want to go again. Otherwise, type 'no'.\n").lower() # Just a check to see if you want to encode/decode anything else or if you want to exit process
+    if restart == "no":
+        should_continue = False
+        print("You have concluded the process.!")
