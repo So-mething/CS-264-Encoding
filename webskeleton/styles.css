@@ -12,7 +12,7 @@
       text-align: center;
     }
 
-    main {
+    .index-base {
       max-width: 800px;
       margin: 30px auto;
       background: white;
@@ -53,3 +53,13 @@
       padding: 15px;
       color: #777;
     }
+
+<-- about page styles -->
+.about-box
+{
+ max-width: 800px;
+      margin: 30px auto;
+      background: gray;
+      padding: 25px;
+      border-radius: 8px;
+}
