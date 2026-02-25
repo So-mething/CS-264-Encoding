@@ -64,6 +64,47 @@
     function runCipher() {
       document.getElementById("output").value = "Cipher output will appear here.";
     }
+
+ const morseDictionary = {'a': '.-','b': '-...','c': '-.-.','d': '-..','e': '.',
+ 'f': '..-.','g': '--.','h': '....','i': '..','j': '.---',
+ 'k': '-.-','l': '.-..','m': '--','n': '-.','o': '---',
+ 'p': '.--.','q': '--.-','r': '.-.','s': '...','t': '-',
+ 'u': '..-','v':'...-','w': '.--','x': '-..-','y': '-.--',
+ 'z': '--..', 
+ ' ': '/'
+};
+
+const reverseMorseDictionary = {};
+for (let key in morseDictionary) {
+    reverseMorseDictionary[morseDictionary[key]] = key;
+}
+
+function textToMorse() {
+    let text = document.getElementById("inputText").value.toLowerCase();
+    let result = "";
+
+    for (let char of text) {
+        if (morseDictionary[char]) {
+            result += morseDictionary[char] + " ";
+        }
+    }
+
+    document.getElementById("outputText").value = result.trim();
+}
+
+function morseToText() {
+    let morse = document.getElementById("inputText").value;
+    let codes = morse.split(" ");
+    let result = "";
+
+    for (let code of codes) {
+        if (reverseMorseDictionary[code]) {
+            result += reverseMorseDictionary[code];
+        }
+    }
+
+    document.getElementById("outputText").value = result;
+}
   </script>
 
 </body>
