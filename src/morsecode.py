@@ -17,14 +17,3 @@ def words_to_morse(message):
         if char in Morse_Code_Dictionary: 
             morse_message.append(Morse_Code_Dictionary[char])       
     return "". join(morse_message)
-
-choice = input("Morse to Word or Word to Morse: ")
-
-if choice == "Morse to Word":
-    user_morse = input("Enter morse code: ")
-    print("Word:", morse_to_words(user_morse))
-    
-if choice == "Word to Morse": 
-    user_word = input("Enter word: ")
-    print("Morse: ", words_to_morse(user_word))
-    
