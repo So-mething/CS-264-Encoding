@@ -1,12 +1,16 @@
 
 <!-- Header + Links styles -->
 
-a:link, a:visited{
+a:link{
       background-color: #111;
       color: white;
       padding: 20px;
       text-align: center;
     }
+
+a:visited{
+      color:white;
+      }
 
     header {
       background-color: #111;
