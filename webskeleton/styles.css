@@ -1,7 +1,7 @@
 
 <!-- Header + Links styles -->
 
-.links:link, links:visited{
+a:link, a:visited{
       background-color: #111;
       color: white;
       padding: 20px;
