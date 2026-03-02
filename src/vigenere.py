@@ -25,20 +25,7 @@ def vigenere(original_text, key_word, encode_or_decode): # I need to get better 
             shifted_position %= len(alphabet) # This is so we don't go out of bounds with the actual list and go to like idk an index of 42 or smth
             output_text += alphabet[shifted_position] # Adds whatever letter in the alphabet is in the position of the "shifted_position" value to the actual output
             
-    print(f"Here is the {encode_or_decode}d result: {output_text}") # Self explanatory
+    # print(f"Here is the {encode_or_decode}d result: {output_text}") # Self explanatory
+    return output_text
 
 should_continue = True # This is set to true so that if you go through the process and then want to stop, you can then stop. Will likely get removed when implemented into the JS
-
-while should_continue:
-    # These three variables below are what goes into the function
-
-    direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n").lower()
-    text = input("Type your message:\n").lower()
-    key = input("Type the keyword (letters only):\n").lower()
-
-    vigenere(original_text=text, key_word=key, encode_or_decode=direction)
-
-    restart = input("Type 'yes' if you want to go again. Otherwise, type 'no'.\n").lower() # Just a check to see if you want to encode/decode anything else or if you want to exit process
-    if restart == "no":
-        should_continue = False
-        print("You have concluded the process.!")
