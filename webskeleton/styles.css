@@ -86,3 +86,20 @@ a:visited{
 justify-content: center;
 }
 
+/* making the boxes uniform (i used this on my copy of the css) */
+textarea, 
+select, 
+input[type="text"], 
+input[type="number"] {
+    width: 100%;
+    box-sizing: border-box; /* This apparently makes it uniform */
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 16px;
+    resize: vertical;
+    min-height: 35px
+}
