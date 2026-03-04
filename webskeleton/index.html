@@ -25,23 +25,29 @@
   <main>
 
     <!-- Cipher Section -->
-      <section class="index-base">
     <section>
-      
       <h2>Message & Cipher</h2>
 
       <label for="message">Message</label>
       <textarea id="message" rows="4" placeholder="Type your message here"></textarea>
 
+      <label for="action">Encode or Decode</label>
+      <select id="action" style="margin-bottom: 15px;">
+        <option value="encode">Encode</option>
+        <option value="decode">Decode</option>
+      </select>
+
       <label for="cipher">Select Cipher</label>
-      <select id="cipher">
+      <select id="cipher" onchange="updateUI()">
         <option value="caesar">Caesar Cipher</option>
         <option value="vigenere">Vigenère Cipher</option>
         <option value="morse">Morse Code</option>
       </select>
 
-      <label for="key">Key / Shift (if required)</label>
-      <input type="text" id="key" placeholder="Enter key or shift">
+      <div id="key-section">
+        <label for="key" id="key-label">Key / Shift</label>
+        <input type="number" id="key" placeholder="Enter shift number">
+      </div>
 
       <button onclick="runCipher()">Run Cipher</button>
     </section>
@@ -51,21 +57,72 @@
       <h2>Output</h2>
       <textarea id="output" rows="4" readonly placeholder="Result will appear here"></textarea>
     </section>
-      </section>
+
   </main>
 
   <footer>
-    <p>© 2026 – Cipher Project</p>
+    <p>© 2026 – Group 4 Cipher Project - CS264</p>
   </footer>
 
   <script>
     function login() {
       alert("Login functionality not implemented yet.");
     }
+    function updateUI() {
+      const selectedCipher = document.getElementById("cipher").value;
+      const keySection = document.getElementById("key-section");
+      const keyInput = document.getElementById("key");
+      const keyLabel = document.getElementById("key-label");
 
-    function runCipher() {
-      document.getElementById("output").value = "Cipher output will appear here.";
+      if (selectedCipher === "morse") {
+        // This is to hide the key section for Morse code since it doesn't have a key
+        keySection.style.display = "none";
+      } 
+      else if (selectedCipher === "caesar") {
+        // This changes the section to a number input for Caesar Cipher
+        keySection.style.display = "block";
+        keyLabel.innerText = "Shift Number";
+        keyInput.type = "number"; // Allows numbers instead
+        keyInput.placeholder = "Enter shift number";
+      } 
+      else if (selectedCipher === "vigenere") {
+        // Same thing for Casear, but allows text instead
+        keySection.style.display = "block";
+        keyLabel.innerText = "Keyword";
+        keyInput.type = "text"; // Allows letters (as one would expect)
+        keyInput.placeholder = "Enter keyword (letters only)";
+      }
     }
+    function runCipher() {
+        // Grab the text from the HTML and pack the text
+        const dataPackage = {
+            message: document.getElementById("message").value, // Grabs the plaintext value. I think.
+            key: document.getElementById("key").value, // Grabs the key value
+            cipher: document.getElementById("cipher").value, // Grabs whatever the cipher is
+            action: document.getElementById("action").value // Grabs "encode" or "decode"
+        };
+
+        // Send the text to Python using fetch()
+        fetch('http://127.0.0.1:5000/process', {
+            method: 'POST', // As far as I understand, this relays the information back to the server. I could just be speaking out of my ass tho
+            headers: {
+                'Content-Type': 'application/json' // Making it known it's a JSON package
+            },
+            body: JSON.stringify(dataPackage) // Im assuming this just converts it into a string for the python to read
+        })
+        .then(response => response.json()) // Wait for Python to unpack it, run the cipher, and reply
+        .then(data => {
+            // Take Python's returned answer and put it in the Output
+            document.getElementById("output").value = data.result;
+        })
+        .catch(error => {
+            // This should act as a safety net in case the Flask file isn't running.
+            console.error('Error:', error);
+            document.getElementById("output").value = "Error: Could not connect to the Python server. Is app.py running?";
+        });
+    }
+    window.onload = updateUI; // This apparently sets the initial state.
+    
   </script>
 
 </body>
