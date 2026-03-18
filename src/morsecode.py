@@ -3,13 +3,24 @@ Morse_Code_Dictionary = {'a': '.-','b': '-...','c': '-.-.','d': '-..','e': '.','
 Reverse_Morse_Dictionary = {value: key for key, value in Morse_Code_Dictionary.items()}
 
 def morse_to_words(morse_message): 
-    words = []
-    
-    for code in morse_message.split(): 
-        if code in Reverse_Morse_Dictionary:
-            words.append(Reverse_Morse_Dictionary[code])
-    return " ".join(words)
+    decoded_message = []
+    words = morse_message.strip().split(" / ")
 
+    for word in words:
+        letters = word.split()
+        decoded_word = ""
+
+        for letter in letters: 
+            if letter in Reverse_Morse_Dictionary:
+               decoded_word += Reverse_Morse_Dictionary[letter] 
+            else: 
+                return "Invalid Morse Code" 
+
+        decoded_message.append(decoded_word)
+
+    return " ".join(decoded_message)
+
+   
 def words_to_morse(message): 
     morse_message = [] 
 
