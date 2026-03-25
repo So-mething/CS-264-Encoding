@@ -52,6 +52,7 @@ a:visited{
     input, textarea, select, button {
       width: 60%;
       padding: 10px;
+      justify-content: center;
       margin-bottom: 15px;
       font-size: 14px;
       margin: auto;
@@ -98,6 +99,7 @@ input[type="number"] {
     margin-top: 5px;
     margin-bottom: 15px;
     margin: auto;
+    justify-content: center;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: inherit;
