@@ -56,6 +56,7 @@ a:visited{
       width: 60%;
       padding: 10px;
       justify-content: center;
+      margin: auto;
       margin-bottom: 15px;
       font-size: 14px;
     }
@@ -99,6 +100,7 @@ input[type="number"] {
     width: 60%;
     box-sizing: border-box; /* This apparently makes it uniform */
     padding: 10px;
+    margin: auto;
     margin-top: 5px;
     margin-bottom: 15px;
     justify-content: center;
