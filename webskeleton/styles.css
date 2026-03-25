@@ -54,6 +54,7 @@ a:visited{
       padding: 10px;
       margin-bottom: 15px;
       font-size: 14px;
+      margin: auto;
     }
 
     button {
@@ -91,11 +92,12 @@ textarea,
 select, 
 input[type="text"], 
 input[type="number"] {
-    width: 100%;
+    width: 60%;
     box-sizing: border-box; /* This apparently makes it uniform */
     padding: 10px;
     margin-top: 5px;
     margin-bottom: 15px;
+    margin: auto;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: inherit;
