@@ -40,18 +40,24 @@ a:visited{
     }
 
     section {
+      text-align: center;
       margin-bottom: 25px;
     }
 
     label {
       display: block;
+      text-align: center;
       margin-bottom: 6px;
+      margin-top: 6px;
       font-weight: bold;
     }
 
     input, textarea, select, button {
-      width: 100%;
+      display: flex;
+      width: 60%;
       padding: 10px;
+      justify-content: center;
+      margin: auto;
       margin-bottom: 15px;
       font-size: 14px;
     }
@@ -91,11 +97,14 @@ textarea,
 select, 
 input[type="text"], 
 input[type="number"] {
-    width: 100%;
+    display: flex;
+    width: 60%;
     box-sizing: border-box; /* This apparently makes it uniform */
     padding: 10px;
+    margin: auto;
     margin-top: 5px;
     margin-bottom: 15px;
+    justify-content: center;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: inherit;
