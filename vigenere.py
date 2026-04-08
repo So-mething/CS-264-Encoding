@@ -1,14 +1,15 @@
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 def vigenere(original_text, key_word, encode_or_decode): # I need to get better at using functions
+    key_word = key_word.replace(" ", "")
     if not key_word:
-        raise ValueError("The key cannot be empty.")
+        return "The key cannot be empty."
     
     if not key_word.isalpha():
-        raise ValueError("The key must contain only letters.")
+        return "The key must contain only letters."
     
     if encode_or_decode not in ["encode", "decode"]:
-        raise ValueError("The mode must be 'encode' or 'decode'.")
+        return "The mode must be 'encode' or 'decode'."
 
     original_text = original_text.lower()
     key_word = key_word.lower()
