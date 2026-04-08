@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Multi-Cipher Encryption Tool</title>
-   <link rel="stylesheet" href="styles.css">
+   <link rel="stylesheet" href="/static/styles.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 </head>
@@ -14,11 +14,11 @@
     <p>Programming Class Project</p>
       <nav>
       <!--Section that links to other webpages -->
-        <a href="about.html">Cipher Info</a>
+        <a href="/about">Cipher Info</a>
+        <a href="/history">Cipher History</a>
           <!-- login page
           <a href="signup.html">Sign up</a>
           <a href="login.html">Sign in</a>
-          <a href="history.html">History</a>
           -->
      </nav>
   </header>
@@ -26,7 +26,7 @@
   <main>
 
     <!-- Cipher Section -->
-    <section class="cipher">
+    <section>
       <h2>Message & Cipher</h2>
 
       <label for="message">Message</label>
@@ -54,7 +54,7 @@
     </section>
 
     <!-- Output Section -->
-    <section class="output">
+    <section>
       <h2>Output</h2>
       <textarea id="output" rows="4" readonly placeholder="Result will appear here"></textarea>
     </section>
@@ -104,7 +104,7 @@
         };
 
         // Send the text to Python using fetch()
-        fetch('http://127.0.0.1:5000/process', {
+        fetch('/process', {
             method: 'POST', // As far as I understand, this relays the information back to the server. I could just be speaking out of my ass tho
             headers: {
                 'Content-Type': 'application/json' // Making it known it's a JSON package
@@ -115,15 +115,47 @@
         .then(data => {
             // Take Python's returned answer and put it in the Output
             document.getElementById("output").value = data.result;
+            
+            // One the result is acquired this should run
+            const historyRecord = { // This bundles the current data in the encrypter into a single object
+              date: new Date().toLocaleString(), // Gets the date and time
+              action: document.getElementById("action").value, // Gets the type of action
+              cipher: document.getElementById("cipher").value, // Gets the type of cipher
+              message: document.getElementById("message").value, // Gets the plaintext
+              key: document.getElementById("key").value, // Gets the key
+              result: data.result // Gets the encryption
+              };
+
+              let historyVault = JSON.parse(localStorage.getItem("cipherHistory")) || []; // accesses the storage
+              
+              historyVault.unshift(historyRecord); // puts the newly formed object into the storage
+
+              localStorage.setItem("cipherHistory", JSON.stringify(historyVault)); // finalizes the process and saves the object
         })
         .catch(error => {
-            // This should act as a safety net in case the Flask file isn't running.
+            // This should just let you know if the Flask server isn't running. If it is running, then something else went wrong.
             console.error('Error:', error);
             document.getElementById("output").value = "Error: Could not connect to the Python server. Is app.py running?";
         });
     }
-    window.onload = updateUI; // This apparently sets the initial state.
+    window.onload = window.onload = function() {
+    // Checks if the history page sent us a a trigger that the replay button was pressed
+    const replayData = JSON.parse(localStorage.getItem("replayPackage"));
     
+    if (replayData) {
+        // Auto-fill the form with the saved data
+        document.getElementById("action").value = replayData.action; // not gonna repeat most of this stuff since the things in the quotes kinda give it away
+        document.getElementById("cipher").value = replayData.cipher;
+        document.getElementById("message").value = replayData.message;
+        document.getElementById("key").value = replayData.key;
+        
+        // Delete the package so it doesn't auto-fill every time they visit the site
+        localStorage.removeItem("replayPackage");
+    }
+    
+    // Run your normal UI update to fix the key boxes
+    updateUI(); 
+    };
   </script>
 
 </body>
