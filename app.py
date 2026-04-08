@@ -1,20 +1,3 @@
-# from flask import Flask, jsonify, render_template
-
-# app = Flask(__name__)
-
-# @app.route('/')
-# def home():
-#     return render_template('index.html')
-
-# @app.route('/api/data')
-# def get_data():
-#     # Example data to be fetched by JavaScript
-#     data = {"message": "Hello from Flask!"}
-#     return jsonify(data)
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
-
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import caeesar
@@ -24,12 +7,25 @@ app = Flask(__name__)
 
 CORS(app)
 
+@app.route('/')
+def home():
+    return render_template('index.html')
+@app.route('/about')
+def about():
+    return render_template('about.html')
+@app.route('/login')
+def login_page():
+    return render_template('login.html')
+@app.route('/history')
+def history_page():
+    return render_template('history.html')
+
 @app.route('/process', methods=['POST'])
 def process_cipher():
-    # 1. Catch the package from JS
+    # Catch the package from JS
     data = request.json 
     
-    # 2. Extract the pieces
+    # Extract the info
     user_msg = data.get('message', '').lower()
     user_key = data.get('key', '').lower()
     selected_cipher = data.get('cipher', 'caesar')
@@ -37,7 +33,7 @@ def process_cipher():
     
     result = "Error handling cipher."
 
-    # 3. Route the data to the correct file and function
+    # Route the data to the correct function file
     if selected_cipher == 'caesar':
         try:
             shift = int(user_key)
@@ -55,11 +51,11 @@ def process_cipher():
         elif action_type == 'decode':
             result = morsecode.morse_to_words(user_msg)
             
-    # 4. Send the final string back to the webpage
+    # Send the final string back to the webpage
     return jsonify({'result': result}) 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)
 
 if __name__ == '__main__':
     app.run(debug=True)
