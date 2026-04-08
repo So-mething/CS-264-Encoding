@@ -2,41 +2,229 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Multi-Cipher Encryption Tool</title>
-   <link rel="stylesheet" href="styles.css">
+  <title>Cipher History</title>
+  <link rel="stylesheet" href="/static/styles.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* This is for the tooltip for truncated text and where it would show up */
+    .tooltip-container {
+      position: relative;
+      cursor: pointer;
+    }
 
+    /* Had to add this after trying to encrypt the Bee Movie script. Better to have it than to not */
+    .truncate-text {
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    /* This is the tooltip */
+    .custom-tooltip {
+      visibility: hidden; /* can't see it by default */
+      opacity: 0; 
+      transition: opacity 0.2s, visibility 0.2s; /* makes the tooltip have a very slight transition. not super good but idk how else to do it. */
+      transition-delay: 0s; /* goes away immediately */
+      position: absolute; /* this is just visible over everything else */
+      background-color: #f8f9fa;
+      color: #333;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.3); /* this just makes it look like the tooltip is hovering */
+      white-space: normal;
+      width: 1; 
+      max-height: 450px; 
+      overflow-y: auto; /* needed if the text is like absurdly long */
+      z-index: 999;
+      top: 50%; /* top and left values help center the tool tip*/
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .tooltip-container:hover .custom-tooltip { /* this just makes the tooltip visible. you gotta hover over for 3 seconds */
+      visibility: visible;
+      opacity: 1; 
+      transition-delay: 3s; 
+    }
+
+    .table-container {
+      max-height: 400px; /* was having some issues with the table kinda being too big, so i needed this */
+      overflow-y: auto;  /* scroll bar */
+      overflow-x: hidden; /* horizontal scroll bars are ugly */
+      border-bottom: 1px solid #ddd;
+      margin-top: 10px; 
+      padding-bottom: 40px; 
+    }
+
+    .history-table, .history-table th, .history-table td {
+      box-sizing: border-box; 
+    }
+
+/* 6. General Table Formatting */
+    .history-table {
+      width: 100%;
+      table-layout: fixed; /* CRITICAL: Forces the table to rigidly obey the percentages */
+      border-collapse: separate; 
+      border-spacing: 0; 
+      background: white;
+      font-size: 14px; 
+    }
+    
+
+    
+    /* 7. The Sticky Header */
+    .history-table th {
+      background-color: #111;
+      color: white;
+      font-weight: bold;
+      position: sticky; 
+      top: 0; 
+      z-index: 100; 
+      box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); 
+    }
+
+    .history-table th, .history-table td {
+      padding: 10px 12px; 
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      border-right: 1px solid #ddd; 
+    }
+
+    .history-table th:last-child, .history-table td:last-child {
+      border-right: none;
+    }
+    
+    .history-table tbody tr:hover {
+      background-color: #f9f9f9;  /* highlights the bar while hovering over it */
+    }
+    
+    /* Button Formatting */
+    .reuse-btn, .delete-btn {
+      padding: 8px 12px;
+      margin: 0;
+      font-size: 12px; 
+      cursor: pointer;
+    }
+    .delete-btn {
+      background-color: #8b0000; 
+      color: white; 
+    }
+    .delete-btn:hover {
+      background-color: #ff0000;
+    }
+  </style>
 </head>
 <body>
 
   <header>
-    <h1>History</h1>
-    <p>Programming Class Project</p>
-      <nav>
-            <!--Section that links to other webpages -->
-        
-        <a href="index.html">Cipher Encrypter</a>
-        <a href="about.html">Cipher Info</a>
-          <!-- signup page
-          <a href="signup.html">Sign up</a>
-          <a href="login.html">Log In</a>
-          -->
-     </nav>
+    <h1>Encryption History</h1>
+    <p>Your Local Cipher Database</p>
+    <nav>
+      <a href="/">Cipher Encrypter</a>
+      <a href="/about">Cipher Info</a>
+      <!-- <a href="/login">Sign in</a> -->
+    </nav>
   </header>
 
   <main>
-
-    <!-- History Table -->
-    <table>
-      <!-- First Row -->
-      <tr>
-      <th>Cipher Type</th>
-      <th> Key </th>
-      </tr>
-      <!-- Second Row -->
-      <tr>
-        <td></td>
-        <td></td>
-      </tr>
-    </table>
+    <section id="history-container" class="index-base">
+      </section>
   </main>
+
+  <footer>
+    <p>© 2026 – Group 4 Cipher Project - CS264</p>
+  </footer>
+
+  <script>
+    // access localStorage
+    const historyVault = JSON.parse(localStorage.getItem("cipherHistory")) || [];
+    const container = document.getElementById("history-container");
+
+    // check if there's anything already there. If not, then the innerHTML changes to "No History"
+    if (historyVault.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center;">
+                <h2>No History Yet</h2>
+                <p>Go encrypt your first message to start.</p>
+            </div>
+        `;
+    } else {
+        // If there is stuff in the storage, this variable with the organization of the table is added to the innerHTML
+        let tableHTML = `
+            <div class="table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Cipher Type</th>
+                            <th>Action</th>
+                            <th>Plaintext</th>
+                            <th>Key</th>
+                            <th>Encryption</th>
+                            <th>Reuse</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody>
+                </table>
+            </div>
+        `;
+        
+        container.innerHTML = tableHTML;
+        const tbody = document.getElementById("table-body");
+
+        // This area should loop through every cipher that was run and create a new row for it
+        historyVault.forEach((record, index) => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${record.date}</td>
+                <td style="text-transform: capitalize;">${record.cipher}</td>
+                <td style="text-transform: capitalize; font-weight: bold;">${record.action}</td>
+                <td class="tooltip-container">
+                    <div class="truncate-text">${record.message}</div>
+                    <div class="custom-tooltip">${record.message}</div>
+                </td>
+                
+                <td>${record.key || "N/A"}</td>
+                
+                <td class="tooltip-container">
+                    <div class="truncate-text">${record.result}</div>
+                    <div class="custom-tooltip">${record.result}</div>
+                </td>
+                
+                <td>
+                    <button class="reuse-btn" onclick='triggerReplay(${JSON.stringify(record)})'>Reuse</button>
+                </td>
+                <td>
+                    <button class="delete-btn" onclick='deleteRecord(${index})'>Delete</button>
+                </td>
+            `;
+            
+            tbody.appendChild(row);
+        });
+    }
+
+    // The Replay Function
+    function triggerReplay(recordData) {
+        localStorage.setItem("replayPackage", JSON.stringify(recordData));
+        window.location.href = "/";
+    }
+
+    // The Delete Function
+    function deleteRecord(indexToRemove) {
+        if (confirm("Are you sure you want to delete this cipher from your history?")) {
+            let vault = JSON.parse(localStorage.getItem("cipherHistory")) || [];
+            vault.splice(indexToRemove, 1);
+            localStorage.setItem("cipherHistory", JSON.stringify(vault));
+            window.location.reload();
+        }
+    }
+  </script>
+
+</body>
+</html>
