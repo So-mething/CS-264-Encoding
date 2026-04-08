@@ -40,5 +40,7 @@ def morse_to_words(morse_message):
             decoded_result.append(Reverse_Morse_Dictionary[symbol])
         else:
             return "Error: Invalid Morse code detected. Please use dots/dashes, spaces between letters, and '/' between words."
+            
+    return "".join(decoded_result)
             # raise ValueError(f"The morse code '{symbol}' is invalid")
-        i += 1 
+
