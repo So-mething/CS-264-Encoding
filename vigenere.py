@@ -6,7 +6,7 @@ def vigenere(original_text, key_word, encode_or_decode): # I need to get better 
         return "The key cannot be empty."
     
     if not key_word.isalpha():
-        return "The key must contain only letters."
+        return "Error: Vigenère key must only contain letters. Please remove any numbers or special characters."
     
     if encode_or_decode not in ["encode", "decode"]:
         return "The mode must be 'encode' or 'decode'."
